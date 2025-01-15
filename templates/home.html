@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekomendasi Studio Musik</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .studio {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            text-align: center;
+            width: 250px;
+        }
+        img {
+            width: 200px;
+            height: auto;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+        }
+        .section {
+            margin: 20px;
+        }
+        .studio-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Studio Musik Yogyakarta</h1>
+
+    <div class="section">
+        <h2>Rekomendasi Studio</h2>
+        <div class="studio-list">
+            {% for studio in recommendations %}
+                <div class="studio">
+                    <h3>{{ studio.nama }}</h3>
+                    <p>Lokasi: {{ studio.lokasi }}</p>
+                    <p>Harga: Rp{{ studio.harga }}</p>
+                    <img src="{{ studio.foto }}" alt="{{ studio.nama }}">
+                    <button onclick="sendClick({{ studio.id }})">Klik untuk Detail</button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Semua Studio</h2>
+        <div class="studio-list">
+            {% for studio in all_studios %}
+                <div class="studio">
+                    <h3>{{ studio.nama }}</h3>
+                    <p>Lokasi: {{ studio.lokasi }}</p>
+                    <p>Harga: Rp{{ studio.harga }}</p>
+                    <img src="{{ studio.foto }}" alt="{{ studio.nama }}">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function sendClick(studioId) {
+            fetch('/click', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ studio_id: studioId })
+            }).then(response => response.json())
+              .then(data => alert(data.message))
+              .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
